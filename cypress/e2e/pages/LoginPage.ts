@@ -19,7 +19,7 @@ class LoginPage {
         this.elements.email_input().type('sample@mail.com') //Enter your email
         this.elements.email_continue().click()
         this.elements.password_input().type('samplepassword{enter}') //Enter your password
-        this.elements.user_validation().should('contain','Hello, smit')
+        this.elements.user_validation().should('contain','Hello, your name') //Validate your name
     }
 
 
