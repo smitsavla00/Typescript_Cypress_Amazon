@@ -11,6 +11,7 @@ class AmazonFreshPage {
     visits(){
 
         cy.visit('https://www.amazon.in/')
+        
     }
 
     AmazonFreshflow(){
