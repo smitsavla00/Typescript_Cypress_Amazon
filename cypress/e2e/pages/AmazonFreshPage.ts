@@ -20,6 +20,7 @@ class AmazonFreshPage {
         this.elements.HouseholdEssentials().scrollIntoView().should('be.visible')
         this.elements.Detergents_Liquids().should('be.visible').click()
         this.elements.category_header().should('be.visible')
+        
 
     }
 
