@@ -1,0 +1,25 @@
+name: Greythr Sign In Test
+
+on:
+  schedule:
+    - cron: '30 2 * * 1-5'  # 8:00 AM IST = 2:30 AM UTC (Mon–Fri)
+  workflow_dispatch:  # allows manual runs
+
+jobs:
+  signin:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run Greythr Sign In Test
+        run: npx cypress run --spec "cypress/e2e/GreythrSigninTest.cy.ts"

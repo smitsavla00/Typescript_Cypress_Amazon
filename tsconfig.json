@@ -2,7 +2,7 @@
   "compilerOptions": {
     "target": "ES6",                          // Modern JS features
     "lib": ["dom", "es6", "es2015"],          // DOM & JS runtime support
-    "types": ["cypress"],                     // Cypress types globally available
+    "types": ["cypress","cypress-real-events"],                     // Cypress types globally available
     "module": "ESNext",                       // Supports ES Modules
     "moduleResolution": "Node",
     "esModuleInterop": true,                  // Enables `import x from '...'`
@@ -10,7 +10,7 @@
     "resolveJsonModule": true,                // Allows importing JSON files
     "noEmit": true,                           // Don't generate JS files
     "strict": true,                           // Enable strict type-checking
-    "skipLibCheck": true                      // Skip type checks on node_modules
+    "skipLibCheck": true,                      // Skip type checks on node_modules
   },
   "include": [
     "cypress/**/*.ts",                        // All Cypress tests & pages
@@ -18,5 +18,6 @@
   ],
   "exclude": [
     "node_modules"
-  ]
+  ],
+  
 }

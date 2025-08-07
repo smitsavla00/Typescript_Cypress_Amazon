@@ -1,0 +1,25 @@
+name: Greythr Sign Out Test
+
+on:
+  schedule:
+    - cron: '30 13 * * 1-5'  # 7:00 PM IST = 1:30 PM UTC (Mon–Fri)
+  workflow_dispatch:  # allows manual runs
+
+jobs:
+  signout:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run Greythr Sign Out Test
+        run: npx cypress run --spec "cypress/e2e/GreythrSignoutTest.cy.ts"
