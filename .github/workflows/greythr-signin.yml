@@ -22,4 +22,4 @@ jobs:
         run: npm ci
 
       - name: Run Greythr Sign In Test
-        run: npx cypress run --spec "cypress/e2e/GreythrSigninTest.cy.ts"
+        run: npx cypress run --spec "cypress/e2e/tests/GreythrSigninTest.cy.ts"
