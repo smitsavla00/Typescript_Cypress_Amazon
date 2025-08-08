@@ -17,5 +17,9 @@
   "bugs": {
     "url": "https://github.com/smitsavla00/Typescript_Cypress_Amazon/issues"
   },
-  "homepage": "https://github.com/smitsavla00/Typescript_Cypress_Amazon#readme"
+  "homepage": "https://github.com/smitsavla00/Typescript_Cypress_Amazon#readme",
+  "devDependencies": {
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.2"
+  }
 }
