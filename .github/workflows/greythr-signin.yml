@@ -2,8 +2,8 @@ name: Greythr Sign In Test
 
 on:
   schedule:
-    - cron: '30 2 * * 1-5'  # Runs every weekday at 8:00 AM IST (which is 2:30 AM UTC)
-  workflow_dispatch:        # Allow manual trigger too
+    - cron: '30 2 * * 1-5'  # Weekdays at 8:00 AM IST (2:30 AM UTC)
+  workflow_dispatch:
 
 jobs:
   cypress-run:
@@ -19,7 +19,10 @@ jobs:
           node-version: 18
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
+
+      - name: Verify Cypress version installed
+        run: npx cypress --version
 
       - name: Run Greythr Sign In Test
         run: npx cypress run --spec "cypress/e2e/tests/GreythrSigninTest.cy.ts"

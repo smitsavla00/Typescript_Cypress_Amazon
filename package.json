@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/smitsavla00/Typescript_Cypress_Amazon#readme",
   "devDependencies": {
+    "cypress": "^14.5.4",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.2"
   }

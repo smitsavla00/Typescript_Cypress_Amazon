@@ -2,11 +2,11 @@ name: Greythr Sign Out Test
 
 on:
   schedule:
-    - cron: '30 13 * * 1-5'  # 7:00 PM IST = 1:30 PM UTC (Mon–Fri)
-  workflow_dispatch:  # allows manual runs
+    - cron: '30 13 * * 1-5'  # Weekdays at 7:00 PM IST (1:30 PM UTC)
+  workflow_dispatch:         # Manual trigger support
 
 jobs:
-  signout:
+  cypress-run:
     runs-on: ubuntu-latest
 
     steps:
@@ -19,8 +19,12 @@ jobs:
           node-version: 18
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
+      - name: Verify Cypress version
+        run: npx cypress --version
 
       - name: Run Greythr Sign Out Test
-        run: npx cypress run --spec "cypress/e2e/test/GreythrSignoutTest.cy.ts"
+        run: npx cypress run --spec "cypress/e2e/tests/GreythrSignoutTest.cy.ts"
+        env:
+          NODE_OPTIONS: "--loader ts-node/esm"
