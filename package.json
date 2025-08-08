@@ -19,7 +19,9 @@
   },
   "homepage": "https://github.com/smitsavla00/Typescript_Cypress_Amazon#readme",
   "devDependencies": {
+    "@4tw/cypress-drag-drop": "^2.3.0",
     "cypress": "^14.5.4",
+    "cypress-real-events": "^1.14.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.2"
   }

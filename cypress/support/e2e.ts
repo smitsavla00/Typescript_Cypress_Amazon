@@ -4,6 +4,9 @@ import './commands';
 import '@4tw/cypress-drag-drop';
 import 'cypress-real-events/support';
 import 'cypress-real-events/support';
+import 'cypress-real-events/support';
+import '@4tw/cypress-drag-drop';
+
 
 
 
