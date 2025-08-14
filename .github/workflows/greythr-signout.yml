@@ -8,6 +8,12 @@ on:
 jobs:
   cypress-run:
     runs-on: ubuntu-latest
+    if: >
+      github.event_name == 'workflow_dispatch' ||
+      (
+        !contains('Saturday,Sunday', format('dddd', now())) &&
+        format('yyyy-MM-dd', now()) != '2025-08-15'
+      )
 
     steps:
       - name: Checkout repository
