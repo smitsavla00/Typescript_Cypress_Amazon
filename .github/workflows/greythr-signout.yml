@@ -6,10 +6,7 @@ on:
   workflow_dispatch:
 
 env:
-  # Run all date logic in IST so "weekend" checks match India weekends
   TZ: Asia/Kolkata
-
-  # Add holidays (YYYY-MM-DD, one per line)
   HOLIDAYS: |
     2025-08-27
     2025-10-01
@@ -50,7 +47,6 @@ jobs:
 
   cypress-run:
     needs: gate
-    # Manual runs always allowed; scheduled runs are skipped if gate says so
     if: ${{ github.event_name == 'workflow_dispatch' || needs.gate.outputs.skip != 'true' }}
     runs-on: ubuntu-latest
     steps:
