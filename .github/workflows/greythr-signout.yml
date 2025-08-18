@@ -18,27 +18,27 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       skip: ${{ steps.check.outputs.skip }}
-      reason: ${{ steps.check.outputs.reason }}
     steps:
       - id: check
         shell: bash
         run: |
           today=$(TZ="$TZ" date +%F)
-          dow=$(TZ="$TZ" date +%u)
+          dow=$(TZ="$TZ" date +%u)   # 1=Mon ... 7=Sun
 
+          # default: don't skip
           echo "skip=false" >> "$GITHUB_OUTPUT"
 
+          # weekend?
           if [ "$dow" -ge 6 ]; then
             echo "skip=true" >> "$GITHUB_OUTPUT"
-            echo "reason=Weekend" >> "$GITHUB_OUTPUT"
             exit 0
           fi
 
+          # holiday?
           while IFS= read -r h; do
             [ -z "$h" ] && continue
             if [ "$h" = "$today" ]; then
               echo "skip=true" >> "$GITHUB_OUTPUT"
-              echo "reason=Holiday $today" >> "$GITHUB_OUTPUT"
               exit 0
             fi
           done <<< "$HOLIDAYS"
@@ -66,10 +66,3 @@ jobs:
         run: npx cypress run --spec "cypress/e2e/tests/GreythrSignoutTest.cy.ts"
         env:
           NODE_OPTIONS: "--loader ts-node/esm"
-
-  explain-skip:
-    needs: gate
-    if: ${{ github.event_name != 'workflow_dispatch' && needs.gate.outputs.skip == 'true' }}
-    runs-on: ubuntu-latest
-    steps:
-      - run: echo "Skipping run: ${{ needs.gate.outputs.reason }}."
