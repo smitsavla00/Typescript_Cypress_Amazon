@@ -5,47 +5,8 @@ on:
     - cron: '30 13 * * 1-5'  # Weekdays at 7:00 PM IST (1:30 PM UTC)
   workflow_dispatch:
 
-env:
-  TZ: Asia/Kolkata
-  HOLIDAYS: |
-    2025-08-27
-    2025-10-01
-    2025-10-02
-    2025-10-20
-
 jobs:
-  gate:
-    runs-on: ubuntu-latest
-    outputs:
-      skip: ${{ steps.check.outputs.skip }}
-    steps:
-      - id: check
-        shell: bash
-        run: |
-          today=$(TZ="$TZ" date +%F)
-          dow=$(TZ="$TZ" date +%u)   # 1=Mon ... 7=Sun
-
-          # default: don't skip
-          echo "skip=false" >> "$GITHUB_OUTPUT"
-
-          # weekend?
-          if [ "$dow" -ge 6 ]; then
-            echo "skip=true" >> "$GITHUB_OUTPUT"
-            exit 0
-          fi
-
-          # holiday?
-          while IFS= read -r h; do
-            [ -z "$h" ] && continue
-            if [ "$h" = "$today" ]; then
-              echo "skip=true" >> "$GITHUB_OUTPUT"
-              exit 0
-            fi
-          done <<< "$HOLIDAYS"
-
   cypress-run:
-    needs: gate
-    if: ${{ github.event_name == 'workflow_dispatch' || needs.gate.outputs.skip != 'true' }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
