@@ -23,19 +23,17 @@ jobs:
       - id: check
         shell: bash
         run: |
-          today=$(TZ="$TZ" date +%F)   # e.g. 2025-08-27 (IST)
-          dow=$(TZ="$TZ" date +%u)     # 1=Mon ... 7=Sun
+          today=$(TZ="$TZ" date +%F)
+          dow=$(TZ="$TZ" date +%u)
 
           echo "skip=false" >> "$GITHUB_OUTPUT"
 
-          # Weekend guard (also covers manual runs)
           if [ "$dow" -ge 6 ]; then
             echo "skip=true" >> "$GITHUB_OUTPUT"
             echo "reason=Weekend" >> "$GITHUB_OUTPUT"
             exit 0
           fi
 
-          # Holiday guard
           while IFS= read -r h; do
             [ -z "$h" ] && continue
             if [ "$h" = "$today" ]; then
