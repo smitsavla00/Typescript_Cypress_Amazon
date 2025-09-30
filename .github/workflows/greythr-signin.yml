@@ -9,6 +9,16 @@ jobs:
   cypress-run:
     runs-on: ubuntu-latest
     steps:
+      - name: Check if today is a skip day
+        run: |
+         SKIP_DAYS=("2025-09-30" 2025-10-01 "2025-10-02" "2025-10-20")
+         TODAY=$(date -u +"%Y-%m-%d")
+         if [[ " ${SKIP_DAYS[@]} " =~ " ${TODAY} " ]]; then
+          echo "Today ($TODAY) is in the skip list. Exiting..."
+          exit 0
+         else
+          echo "Today ($TODAY) is not in skip list. Continuing..."
+         fi
       - name: Checkout repository
         uses: actions/checkout@v4
 
