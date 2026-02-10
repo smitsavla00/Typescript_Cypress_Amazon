@@ -1,0 +1,729 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>For You 💘</title>
+  <meta name="description" content="A tiny romantic website made with love."/>
+  <style>
+    :root{
+      --bg1:#ffe4ec;
+      --bg2:#e5d9ff;
+      --bg3:#d8f4ff;
+      --card:rgba(255,255,255,.62);
+      --card-border:rgba(255,255,255,.40);
+      --text:#1b1b2a;
+      --muted:#4b4b63;
+      --pink:#e11d48;
+      --rose:#fb7185;
+      --lav:#a78bfa;
+      --ink:#111827;
+      --shadow: 0 24px 70px rgba(0,0,0,.18);
+      --r: 22px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      min-height:100vh;
+      color:var(--text);
+      overflow:hidden;
+      background:
+        radial-gradient(1200px 800px at 18% 20%, rgba(255,255,255,.70), transparent 60%),
+        radial-gradient(950px 720px at 82% 35%, rgba(255,255,255,.52), transparent 55%),
+        linear-gradient(135deg, var(--bg1), var(--bg2) 55%, var(--bg3));
+    }
+
+    body:before{
+      content:"";
+      position:fixed; inset:0;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)' opacity='.12'/%3E%3C/svg%3E");
+      opacity:.35;
+      pointer-events:none;
+      mix-blend-mode: soft-light;
+    }
+
+    .heart{
+      position:fixed;
+      left:var(--x);
+      top:110vh;
+      width:14px;height:14px;
+      transform: rotate(45deg);
+      background: rgba(225,29,72,.55);
+      opacity:.85;
+      filter: drop-shadow(0 8px 14px rgba(0,0,0,.14));
+      animation: floatUp var(--d) linear infinite;
+      pointer-events:none;
+    }
+    .heart::before,.heart::after{
+      content:"";
+      position:absolute;
+      width:14px;height:14px;
+      background: inherit;
+      border-radius: 50%;
+    }
+    .heart::before{left:-7px;top:0}
+    .heart::after{left:0;top:-7px}
+    @keyframes floatUp{
+      0%{ transform: translateY(0) rotate(45deg) scale(.9); opacity:0}
+      10%{opacity:.88}
+      100%{ transform: translateY(-240vh) rotate(45deg) scale(1.25); opacity:0}
+    }
+
+    canvas{position:fixed; inset:0; pointer-events:none}
+
+    .wrap{
+      position:relative;
+      min-height:100vh;
+      display:grid;
+      place-items:center;
+      padding:24px;
+    }
+
+    .card{
+      width:min(720px, 94vw);
+      backdrop-filter: blur(12px);
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: var(--r);
+      box-shadow: var(--shadow);
+      padding: 26px 22px;
+      position:relative;
+      overflow:hidden;
+    }
+
+    .topRow{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      margin-bottom: 10px;
+    }
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.65);
+      border: 1px solid rgba(255,255,255,.45);
+      font-weight: 800;
+    }
+    .small{
+      font-size: 12px;
+      color: rgba(27,27,42,.75);
+    }
+
+    .controls{
+      display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end;
+    }
+    .iconBtn{
+      border: 1px solid rgba(17,24,39,.16);
+      background: rgba(255,255,255,.55);
+      border-radius: 999px;
+      padding: 10px 12px;
+      font-weight: 800;
+      cursor:pointer;
+      transition: transform .12s ease, filter .12s ease;
+      user-select:none;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .iconBtn:hover{ filter: brightness(1.04) }
+    .iconBtn:active{ transform: translateY(1px) }
+
+    h1{
+      margin: 8px 0 10px;
+      font-size: clamp(24px, 4.5vw, 36px);
+      line-height:1.15;
+      letter-spacing:.2px;
+      text-align:center;
+      text-shadow: 0 1px 0 rgba(255,255,255,.55);
+    }
+    p{
+      margin:0 0 14px;
+      color:var(--muted);
+      font-size: 15px;
+      text-align:center;
+    }
+
+    .typeLine{
+      display:inline-block;
+      border-right: 2px solid rgba(27,27,42,.45);
+      padding-right: 6px;
+      animation: caret 700ms steps(1) infinite;
+    }
+    @keyframes caret{ 50%{ border-right-color: transparent } }
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap: 16px;
+      margin-top: 16px;
+    }
+    @media (max-width: 820px){
+      .grid{ grid-template-columns:1fr; }
+    }
+
+    .panel{
+      background: rgba(255,255,255,.55);
+      border: 1px solid rgba(255,255,255,.42);
+      border-radius: 18px;
+      padding: 16px 14px;
+      box-shadow: 0 16px 36px rgba(0,0,0,.10);
+    }
+
+    .panel h2{
+      margin:0 0 10px;
+      font-size: 16px;
+      letter-spacing:.2px;
+      color: rgba(27,27,42,.92);
+      display:flex; align-items:center; gap:8px;
+    }
+    .list{
+      display:grid;
+      gap:10px;
+      margin-top: 8px;
+    }
+    .chip{
+      padding: 10px 12px;
+      border-radius: 14px;
+      background: rgba(255,255,255,.62);
+      border: 1px solid rgba(17,24,39,.10);
+      color: rgba(27,27,42,.88);
+      font-weight:700;
+      text-align:left;
+    }
+
+    .gallery{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap:10px;
+      margin-top: 10px;
+    }
+    .ph{
+      border-radius: 16px;
+      overflow:hidden;
+      border: 1px solid rgba(255,255,255,.45);
+      background: rgba(255,255,255,.35);
+      aspect-ratio: 1 / 1;
+      display:grid;
+      place-items:center;
+      font-weight: 900;
+      color: rgba(27,27,42,.55);
+      position:relative;
+    }
+    .ph img{
+      width:100%; height:100%;
+      object-fit:cover;
+      display:block;
+      transform: scale(1.02);
+    }
+    .ph span{
+      position:absolute;
+      inset:auto 10px 10px 10px;
+      background: rgba(255,255,255,.65);
+      border: 1px solid rgba(255,255,255,.45);
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 900;
+      color: rgba(27,27,42,.85);
+      text-align:center;
+    }
+
+    .btnRow{
+      margin-top: 18px;
+      display:flex;
+      justify-content:center;
+      gap:14px;
+      flex-wrap:wrap;
+      position:relative;
+      min-height: 58px;
+    }
+    button{
+      border:0;
+      border-radius: 999px;
+      padding: 12px 18px;
+      font-weight: 900;
+      font-size: 15px;
+      cursor:pointer;
+      transition: transform .12s ease, box-shadow .12s ease, filter .12s ease;
+      user-select:none;
+      -webkit-tap-highlight-color: transparent;
+    }
+    button:active{ transform: translateY(1px) scale(.99) }
+    .yes{
+      background: linear-gradient(135deg, var(--pink), var(--rose));
+      color:white;
+      box-shadow: 0 14px 28px rgba(225,29,72,.28);
+    }
+    .yes:hover{ filter: brightness(1.04) }
+    .no{
+      background: rgba(17,24,39,.08);
+      border: 1px solid rgba(17,24,39,.18);
+      color: rgba(17,24,39,.85);
+      position:absolute;
+      left: 52%;
+      transform: translateX(-50%);
+      box-shadow: 0 12px 22px rgba(0,0,0,.09);
+    }
+
+    .modalBackdrop{
+      position:fixed; inset:0;
+      background: rgba(10,10,20,.22);
+      display:none;
+      place-items:center;
+      padding: 18px;
+      z-index: 50;
+      backdrop-filter: blur(6px);
+    }
+    .modal{
+      width:min(560px, 95vw);
+      background: rgba(255,255,255,.72);
+      border: 1px solid rgba(255,255,255,.45);
+      border-radius: 22px;
+      box-shadow: 0 26px 80px rgba(0,0,0,.20);
+      padding: 18px 16px;
+      position:relative;
+    }
+    .modal h3{ margin: 4px 0 10px; text-align:center; }
+    .modal p{ text-align:center; margin-bottom:12px; white-space:pre-wrap; }
+    .close{
+      position:absolute; top:10px; right:10px;
+      border: 1px solid rgba(17,24,39,.16);
+      background: rgba(255,255,255,.60);
+      border-radius: 999px;
+      padding: 8px 10px;
+      font-weight: 900;
+      cursor:pointer;
+    }
+
+    .success{
+      display:none;
+      animation: popIn .35s ease both;
+      text-align:center;
+    }
+    @keyframes popIn{
+      from{ transform: translateY(10px) scale(.98); opacity:0 }
+      to{ transform: translateY(0) scale(1); opacity:1 }
+    }
+    .bigLove{
+      font-size: clamp(22px, 4.5vw, 34px);
+      font-weight: 1000;
+      margin-top: 2px;
+    }
+    .media{
+      margin: 14px auto 10px;
+      width:min(520px, 96%);
+      border-radius: 18px;
+      overflow:hidden;
+      border: 1px solid rgba(255,255,255,.45);
+      box-shadow: 0 20px 48px rgba(0,0,0,.18);
+      background: rgba(255,255,255,.35);
+    }
+    .media img, .media video{ width:100%; display:block; }
+    .fromLine{ margin-top: 10px; font-weight: 900; color: rgba(27,27,42,.85); }
+
+    .hint{
+      margin-top: 12px;
+      opacity:.85;
+      font-size: 12.5px;
+      text-align:center;
+    }
+    code{background: rgba(255,255,255,.55); padding:2px 6px; border-radius:8px}
+  </style>
+</head>
+
+<body>
+  <canvas id="confetti"></canvas>
+
+  <div class="modalBackdrop" id="modalBackdrop">
+    <div class="modal">
+      <button class="close" id="closeModal">✕</button>
+      <h3>💌 A little love letter</h3>
+      <p id="letterText"></p>
+      <div class="hint">You can edit this text in <code>CONFIG.loveLetter</code> ✨</div>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="card" id="card">
+
+      <div class="topRow">
+        <div class="pill">💘 Valentine Mode <span class="small" id="dateLabel"></span></div>
+        <div class="controls">
+          <button class="iconBtn" id="musicBtn" title="Play / pause music">🎵 Music</button>
+          <button class="iconBtn" id="letterBtn" title="Open love letter">💌 Letter</button>
+          <button class="iconBtn" id="surpriseBtn" title="Tiny surprise">🎁 Surprise</button>
+        </div>
+      </div>
+
+      <h1>
+        <span id="name">HerName</span>,
+        <br/>
+        <span class="typeLine" id="typeLine">I have something cute to ask you…</span>
+      </h1>
+      <p id="sub">If you smile right now, my mission is already successful 😌💗</p>
+
+      <div id="ask">
+        <div class="grid">
+          <div class="panel">
+            <h2>✨ Reasons I adore you</h2>
+            <div class="list" id="reasons"></div>
+          </div>
+
+          <div class="panel">
+            <h2>📸 Us (mini gallery)</h2>
+            <p class="small" style="text-align:left;margin:0 0 8px;">
+              Add your photos by placing files next to <code>index.html</code> and updating <code>CONFIG.photos</code>.
+            </p>
+            <div class="gallery" id="gallery"></div>
+          </div>
+        </div>
+
+        <div class="btnRow" id="btnRow">
+          <button class="yes" id="yesBtn">YES 💖</button>
+          <button class="no" id="noBtn" aria-label="No">No 😶</button>
+        </div>
+
+        <div class="hint">
+          Quick edit: open <code>index.html</code> → update <code>CONFIG</code> (name, message, photos, letter).
+        </div>
+      </div>
+
+      <div id="yay" class="success" aria-live="polite">
+        <div class="pill" style="justify-content:center;">💖 SHE SAID YES 💖</div>
+        <div class="bigLove">Okay… now you’re officially my Valentine 😘</div>
+        <p id="yaySub">I’m planning a date you’ll never forget 🌙✨</p>
+
+        <div class="media">
+          <img id="successImg" src="https://media.giphy.com/media/3oriO0OEd9QIDdllqo/giphy.gif" alt="Happy dance"/>
+        </div>
+
+        <div class="fromLine">— love, <span id="from">YourName</span> ❤️</div>
+        <p class="small" id="shareHint" style="margin-top:8px;">Now send this link to me with “I said YES 😌💗”</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const CONFIG = {
+      herName: "Vaishali",
+      yourName: "Smit",
+      typedLines: [
+        "I have something cute to ask you…",
+        "You + me = my favorite plan 💗",
+        "Warning: this page contains too much love 😄"
+      ],
+      subText: "If you smile right now, my mission is already successful 😌💗",
+      reasons: [
+        "Your smile fixes my bad days instantly.",
+        "You’re my favorite person to talk to—always.",
+        "You make simple moments feel special.",
+        "You’re kind, strong, and ridiculously adorable.",
+        "You feel like home to me."
+      ],
+      photos: [],
+      successImage: null,
+      yaySubText: "I’m planning a date you’ll never forget 🌙✨",
+      loveLetter:
+        "Hey love,\n\nI just wanted you to know… you’re my favorite part of every day. " +
+        "Thank you for choosing me, understanding me, and making life sweeter.\n\n" +
+        "Will you be my Valentine and keep being my forever person? 💘",
+      musicFile: null
+    };
+
+    const $ = (id) => document.getElementById(id);
+
+    $("name").textContent = CONFIG.herName;
+    $("from").textContent = CONFIG.yourName;
+    $("sub").textContent = CONFIG.subText;
+    $("yaySub").textContent = CONFIG.yaySubText;
+    $("letterText").textContent = CONFIG.loveLetter;
+
+    const now = new Date();
+    $("dateLabel").textContent = "• " + now.toLocaleDateString(undefined, { weekday:"short", month:"short", day:"numeric" });
+
+    const reasonsEl = $("reasons");
+    reasonsEl.innerHTML = "";
+    for (const r of CONFIG.reasons){
+      const div = document.createElement("div");
+      div.className = "chip";
+      div.textContent = "💗 " + r;
+      reasonsEl.appendChild(div);
+    }
+
+    const galleryEl = $("gallery");
+    galleryEl.innerHTML = "";
+    const photos = Array.isArray(CONFIG.photos) ? CONFIG.photos.slice(0,3) : [];
+    for (let i=0;i<3;i++){
+      const ph = document.createElement("div");
+      ph.className = "ph";
+      if (photos[i]){
+        const img = document.createElement("img");
+        img.src = photos[i];
+        img.alt = "Us photo " + (i+1);
+        ph.appendChild(img);
+        const cap = document.createElement("span");
+        cap.textContent = "us 💕";
+        ph.appendChild(cap);
+      } else {
+        ph.textContent = "💞";
+        const cap = document.createElement("span");
+        cap.textContent = "add photo " + (i+1);
+        ph.appendChild(cap);
+      }
+      galleryEl.appendChild(ph);
+    }
+
+    const typeEl = $("typeLine");
+    const lines = (CONFIG.typedLines && CONFIG.typedLines.length) ? CONFIG.typedLines : ["I have something cute to ask you…"];
+    let lineIdx = 0, charIdx = 0, deleting = false;
+
+    function typeTick(){
+      const current = lines[lineIdx];
+      if (!deleting){
+        charIdx++;
+        typeEl.textContent = current.slice(0, charIdx);
+        if (charIdx >= current.length){
+          deleting = true;
+          setTimeout(typeTick, 1400);
+          return;
+        }
+      } else {
+        charIdx--;
+        typeEl.textContent = current.slice(0, Math.max(0,charIdx));
+        if (charIdx <= 0){
+          deleting = false;
+          lineIdx = (lineIdx + 1) % lines.length;
+        }
+      }
+      setTimeout(typeTick, deleting ? 35 : 45);
+    }
+    setTimeout(typeTick, 700);
+
+    if (CONFIG.successImage){
+      $("successImg").src = CONFIG.successImage;
+    }
+
+    const noBtn = $("noBtn");
+    const yesBtn = $("yesBtn");
+    const btnRow = $("btnRow");
+    let noCount = 0;
+
+    function moveNoButton(){
+      const padding = 10;
+      const rowRect = btnRow.getBoundingClientRect();
+      const btnRect = noBtn.getBoundingClientRect();
+      const maxX = rowRect.width - btnRect.width - padding;
+      const maxY = 48;
+      const x = padding + Math.random() * Math.max(0, maxX - padding);
+      const y = Math.random() * maxY;
+      noBtn.style.left = x + "px";
+      noBtn.style.top = y + "px";
+    }
+
+    btnRow.style.position = "relative";
+    noBtn.style.position = "absolute";
+    noBtn.style.top = "0px";
+    noBtn.style.left = "52%";
+
+    noBtn.addEventListener("mouseenter", () => { noCount++; moveNoButton(); updateNoText(); });
+    noBtn.addEventListener("touchstart", (e) => { noCount++; moveNoButton(); updateNoText(); e.preventDefault(); }, {passive:false});
+    noBtn.addEventListener("click", (e) => { noCount++; moveNoButton(); updateNoText(); e.preventDefault(); });
+
+    function updateNoText(){
+      const lines = [
+        "No 😶",
+        "Are you sure? 😳",
+        "Pls? 🥺",
+        "Don’t break my heart 😭",
+        "I made a whole website 😤",
+        "Okay… you win 😅",
+        "Still no? Impossible 😈"
+      ];
+      noBtn.textContent = lines[Math.min(noCount, lines.length-1)];
+    }
+
+    yesBtn.addEventListener("click", () => {
+      $("ask").style.display = "none";
+      $("yay").style.display = "block";
+      launchConfetti(320);
+      burstHearts(24);
+      sparklePulse();
+    });
+
+    const modalBackdrop = $("modalBackdrop");
+    $("letterBtn").addEventListener("click", () => {
+      modalBackdrop.style.display = "grid";
+      burstHearts(10);
+    });
+    $("closeModal").addEventListener("click", () => modalBackdrop.style.display = "none");
+    modalBackdrop.addEventListener("click", (e) => { if (e.target === modalBackdrop) modalBackdrop.style.display = "none"; });
+
+    $("surpriseBtn").addEventListener("click", () => {
+      burstHearts(22);
+      launchConfetti(180);
+      const prev = typeEl.textContent;
+      typeEl.textContent = "You are my favorite “YES” 💖";
+      setTimeout(() => typeEl.textContent = prev, 1800);
+    });
+
+    let audio = null;
+    let playing = false;
+
+    function ensureAudio(){
+      if (audio) return;
+      if (CONFIG.musicFile){
+        audio = new Audio(CONFIG.musicFile);
+        audio.loop = true;
+        audio.volume = 0.7;
+      } else {
+        const AC = window.AudioContext || window.webkitAudioContext;
+        const ctxA = new AC();
+        const osc1 = ctxA.createOscillator();
+        const osc2 = ctxA.createOscillator();
+        const gain = ctxA.createGain();
+        const filter = ctxA.createBiquadFilter();
+
+        osc1.type = "sine";
+        osc2.type = "triangle";
+        osc1.frequency.value = 220;
+        osc2.frequency.value = 277.18;
+        gain.gain.value = 0.0001;
+
+        filter.type = "lowpass";
+        filter.frequency.value = 900;
+
+        osc1.connect(filter);
+        osc2.connect(filter);
+        filter.connect(gain);
+        gain.connect(ctxA.destination);
+
+        osc1.start();
+        osc2.start();
+
+        audio = { ctxA, gain, isSynth:true };
+      }
+    }
+
+    function play(){
+      ensureAudio();
+      if (audio.isSynth){
+        audio.ctxA.resume();
+        audio.gain.gain.setTargetAtTime(0.03, audio.ctxA.currentTime, 0.2);
+      } else {
+        audio.play();
+      }
+      playing = true;
+      $("musicBtn").textContent = "⏸️ Music";
+    }
+    function pause(){
+      if (!audio) return;
+      if (audio.isSynth){
+        audio.gain.gain.setTargetAtTime(0.0001, audio.ctxA.currentTime, 0.15);
+      } else {
+        audio.pause();
+      }
+      playing = false;
+      $("musicBtn").textContent = "🎵 Music";
+    }
+
+    $("musicBtn").addEventListener("click", () => {
+      if (!playing) play(); else pause();
+      burstHearts(6);
+    });
+
+    function spawnHeart(){
+      const h = document.createElement("div");
+      h.className = "heart";
+      h.style.setProperty("--x", Math.floor(Math.random()*100) + "vw");
+      h.style.setProperty("--d", (7 + Math.random()*6).toFixed(2) + "s");
+      const a = (0.35 + Math.random()*0.45).toFixed(2);
+      const palette = [
+        `rgba(225,29,72,${a})`,
+        `rgba(251,113,133,${a})`,
+        `rgba(167,139,250,${a})`
+      ];
+      h.style.background = palette[Math.floor(Math.random()*palette.length)];
+      document.body.appendChild(h);
+      setTimeout(() => h.remove(), 14000);
+    }
+    for (let i=0;i<14;i++) setTimeout(spawnHeart, i*360);
+    setInterval(spawnHeart, 720);
+
+    function burstHearts(n){
+      for (let i=0;i<n;i++) setTimeout(spawnHeart, i*60);
+    }
+
+    const canvas = $("confetti");
+    const ctx = canvas.getContext("2d");
+    let W, H, confetti = [], running = false;
+
+    function resize(){
+      W = canvas.width = window.innerWidth * devicePixelRatio;
+      H = canvas.height = window.innerHeight * devicePixelRatio;
+    }
+    window.addEventListener("resize", resize);
+    resize();
+
+    function launchConfetti(count){
+      confetti = [];
+      for (let i=0;i<count;i++){
+        confetti.push({
+          x: (Math.random()*W),
+          y: (-20 - Math.random()*H*0.2),
+          vx: (-1 + Math.random()*2) * devicePixelRatio * 3.2,
+          vy: (2 + Math.random()*5) * devicePixelRatio * 2.4,
+          r: (2 + Math.random()*4.2) * devicePixelRatio,
+          a: Math.random() * Math.PI * 2,
+          va: (-0.2 + Math.random()*0.4),
+          c: ["#e11d48","#fb7185","#f472b6","#a78bfa","#fda4af","#ffffff"][Math.floor(Math.random()*6)],
+          life: 190 + Math.random()*90
+        });
+      }
+      if (!running){
+        running = true;
+        requestAnimationFrame(tick);
+      }
+    }
+
+    function tick(){
+      ctx.clearRect(0,0,W,H);
+      let alive = 0;
+
+      for (const p of confetti){
+        if (p.life <= 0) continue;
+        alive++;
+        p.life -= 1;
+        p.x += p.vx;
+        p.y += p.vy;
+        p.vy += 0.03 * devicePixelRatio;
+        p.a += p.va;
+
+        ctx.save();
+        ctx.translate(p.x, p.y);
+        ctx.rotate(p.a);
+        ctx.fillStyle = p.c;
+        ctx.globalAlpha = Math.min(1, p.life/90);
+        ctx.fillRect(-p.r, -p.r, p.r*2.3, p.r*2.3);
+        ctx.restore();
+      }
+
+      if (alive > 0) requestAnimationFrame(tick);
+      else running = false;
+    }
+
+    function sparklePulse(){
+      const card = $("card");
+      card.animate([
+        { filter:"brightness(1)", transform:"translateY(0)" },
+        { filter:"brightness(1.06)", transform:"translateY(-2px)" },
+        { filter:"brightness(1)", transform:"translateY(0)" }
+      ], { duration: 700, iterations: 2, easing:"ease-in-out" });
+    }
+
+    requestAnimationFrame(() => moveNoButton());
+  </script>
+</body>
+</html>
